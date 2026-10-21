@@ -42,6 +42,7 @@ public class CartaoController {
         @APIResponse(responseCode="401",description="Credenciais ou token ausentes ou inválidos"),
         @APIResponse(responseCode="501",description="Casca ainda não implementada",content=@Content(schema=@Schema(implementation=ErroResponse.class)))
     })
+
     public List<CartaoResponse> listar() {
         return cartoes.listar(usuarioAtual.id());
     }
