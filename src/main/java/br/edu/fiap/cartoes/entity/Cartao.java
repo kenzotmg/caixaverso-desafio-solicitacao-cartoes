@@ -16,6 +16,7 @@ public class Cartao {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     @OneToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "solicitacao_id", nullable = false, unique = true)
     private SolicitacaoCartao solicitacao;
@@ -40,7 +41,11 @@ public class Cartao {
     /** Informar se o cartão está ATIVO. Não criar outra rota obrigatória. */
     public boolean estaAtivo() {
         // TODO: implementar o comportamento descrito no desafio.
-        throw new EtapaNaoImplementadaException("Cartao.estaAtivo");
+        if(this.status == StatusCartao.ATIVO) {
+            throw new EtapaNaoImplementadaException("Cartão já está Ativo");
+        }
+        this.status = StatusCartao.ATIVO;
+        return true;
     }
 
     // Getters e setters prontos; não usar setters de status para contornar as regras.

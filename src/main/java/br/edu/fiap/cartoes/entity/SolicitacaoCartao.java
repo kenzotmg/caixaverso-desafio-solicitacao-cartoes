@@ -16,6 +16,7 @@ public class SolicitacaoCartao {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "usuario_id", nullable = false)
     private Usuario usuario;
@@ -45,13 +46,19 @@ public class SolicitacaoCartao {
     /** Permitir somente PENDENTE para CANCELADA; outros estados geram conflito. */
     public void cancelar() {
         // TODO: implementar o comportamento descrito no desafio.
-        throw new EtapaNaoImplementadaException("SolicitacaoCartao.cancelar");
+        if (this.status != StatusSolicitacao.PENDENTE) {
+            throw new EtapaNaoImplementadaException("Somente PENDENTE pode ser CANCELADA.");
+        }
+        this.status = StatusSolicitacao.CANCELADA;
     }
 
     /** Permitir somente PENDENTE para EMITIDA; executar na mesma transação da criação do cartão. */
     public void marcarEmitida() {
         // TODO: implementar o comportamento descrito no desafio.
-        throw new EtapaNaoImplementadaException("SolicitacaoCartao.marcarEmitida");
+        if (this.status != StatusSolicitacao.PENDENTE) {
+            throw new EtapaNaoImplementadaException("Somente PENDENTE pode ser marcada como EMITIDA.");
+        }
+        this.status = StatusSolicitacao.EMITIDA;
     }
 
     // Getters e setters prontos; não usar setters de status para contornar as regras.

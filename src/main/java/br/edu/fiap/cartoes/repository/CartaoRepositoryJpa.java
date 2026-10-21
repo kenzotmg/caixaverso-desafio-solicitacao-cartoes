@@ -7,4 +7,5 @@ import jakarta.enterprise.context.ApplicationScoped;
 @ApplicationScoped
 public class CartaoRepositoryJpa implements CartaoRepository {
     // TODO: implementar a interface depois de declarar suas assinaturas.
+
 }

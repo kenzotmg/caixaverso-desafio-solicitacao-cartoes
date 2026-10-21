@@ -16,6 +16,7 @@ public class TipoCartao {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     @Column(nullable = false, unique = true, length = 60)
     private String nome;
 
@@ -38,7 +39,8 @@ public class TipoCartao {
     /** Alterar a oferta do tipo sem apagar pedidos anteriores. */
     public void alterarDisponibilidade(boolean disponivel) {
         // TODO: implementar o comportamento descrito no desafio.
-        throw new EtapaNaoImplementadaException("TipoCartao.alterarDisponibilidade");
+        this.disponivel = disponivel;
+        //throw new EtapaNaoImplementadaException("TipoCartao.alterarDisponibilidade");
     }
 
     // Getters e setters prontos; não usar setters de status para contornar as regras.

@@ -1,4 +1,9 @@
 package br.edu.fiap.cartoes.repository;
+
+import br.edu.fiap.cartoes.entity.SolicitacaoCartao;
+
+import java.util.List;
+
 /**
  * Interface de persistência a completar pelo grupo. Não há Spring Data: declarar o
  * nome de um método não cria sua implementação. Escrevam os contratos usados pelos
@@ -7,4 +12,7 @@ package br.edu.fiap.cartoes.repository;
  */
 public interface SolicitacaoCartaoRepository {
     // TODO: definir assinaturas de consulta e gravação indicadas no README.
+    SolicitacaoCartao salvar(SolicitacaoCartao solicitacaoCartao);
+    List<SolicitacaoCartao> listarSolicitacoesPorUsuarioId(Long usuarioId);
+    List<SolicitacaoCartao> listarSolicitacoesPorStatus(String status);
 }

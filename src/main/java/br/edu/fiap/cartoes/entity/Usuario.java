@@ -16,6 +16,7 @@ public class Usuario {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     @Column(nullable = false, length = 100)
     private String nome;
 
@@ -40,16 +41,23 @@ public class Usuario {
         this.criadoEm = Instant.now();
     }
 
+
     /** Validar o nome antes de alterá-lo. */
     public void alterarNome(String nome) {
         // TODO: implementar o comportamento descrito no desafio.
-        throw new EtapaNaoImplementadaException("Usuario.alterarNome");
+        if (nome == null || nome.trim().isEmpty()) {
+            throw new EtapaNaoImplementadaException("Nome não pode ser nulo ou vazio.");
+        }
+        this.nome = nome;
     }
 
     /** Aceitar somente hash produzido pelo componente BCrypt, nunca senha em texto. */
     public void atualizarSenhaHash(String senhaHash) {
         // TODO: implementar o comportamento descrito no desafio.
-        throw new EtapaNaoImplementadaException("Usuario.atualizarSenhaHash");
+        if(senhaHash == null || senhaHash.trim().isEmpty()) {
+            throw new EtapaNaoImplementadaException("Hash da senha não pode ser nulo ou vazio.");
+        }
+        this.senhaHash = senhaHash;
     }
 
     // Getters e setters prontos; não usar setters de status para contornar as regras.
