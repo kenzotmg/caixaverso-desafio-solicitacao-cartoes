@@ -24,7 +24,7 @@ public class CartaoUseCase {
 
     public List<CartaoResponse> listar(Long usuarioId) {
         // TODO: implementar sem colocar SQL ou regras no controller.
-        return cartaoRepository.listarPorUsuario(usuarioId);
-       // throw new EtapaNaoImplementadaException("CartaoUseCase.listar");
+
+        throw new EtapaNaoImplementadaException("CartaoUseCase.listar");
     }
 }
