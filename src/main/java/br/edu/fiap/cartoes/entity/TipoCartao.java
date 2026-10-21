@@ -1,8 +1,6 @@
 package br.edu.fiap.cartoes.entity;
 
 import jakarta.persistence.*;
-import java.time.Instant;
-import br.edu.fiap.cartoes.exception.EtapaNaoImplementadaException;
 
 /**
  * Camada entity: representa o estado persistido de TipoCartao e seus comportamentos simples.
@@ -38,9 +36,7 @@ public class TipoCartao {
 
     /** Alterar a oferta do tipo sem apagar pedidos anteriores. */
     public void alterarDisponibilidade(boolean disponivel) {
-        // TODO: implementar o comportamento descrito no desafio.
         this.disponivel = disponivel;
-        //throw new EtapaNaoImplementadaException("TipoCartao.alterarDisponibilidade");
     }
 
     // Getters e setters prontos; não usar setters de status para contornar as regras.
