@@ -59,6 +59,14 @@ public class UsuarioRepositoryJpa implements UsuarioRepository {
         }
     }
 
+    @Transactional
+    public Optional<Usuario> buscaPorId(Long id) {
+        return entityManager.createQuery("SELECT u FROM Usuario u WHERE u.id = :id", Usuario.class)
+                .setParameter("id", id)
+                .getResultStream()
+                .findFirst();
+    }
+
     private boolean violouChaveUnica(Throwable erro){
         Throwable atual = erro;
         while(atual != null){
