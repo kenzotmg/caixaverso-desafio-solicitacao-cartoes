@@ -15,5 +15,5 @@ public interface UsuarioRepository {
     Usuario salvar(Usuario usuario);
     Optional<Usuario> buscaPorEmail(String email);
     boolean existePorEmail(String email);
-    //Optional<Usuario> buscaPorId(Long id);
+    Optional<Usuario> buscaPorId(Long id);
 }

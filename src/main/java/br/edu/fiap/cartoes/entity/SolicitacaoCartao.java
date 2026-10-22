@@ -43,6 +43,28 @@ public class SolicitacaoCartao {
         this.status = StatusSolicitacao.PENDENTE;
     }
 
+    public SolicitacaoCartao(Long id, Usuario usuario, TipoCartao tipoCartao, Instant solicitadaEm, StatusSolicitacao status) {
+        this(usuario, tipoCartao);
+        this.solicitadaEm = Instant.now();
+        this.status = StatusSolicitacao.PENDENTE;
+        this.id = id;
+    }
+
+    public static SolicitacaoCartao de(SolicitacaoCartao solicitacaoCartao) {
+        SolicitacaoCartao solicitacao = new SolicitacaoCartao();
+        solicitacao.usuario = solicitacaoCartao.usuario;
+        solicitacao.tipoCartao = solicitacaoCartao.tipoCartao;
+        solicitacao.solicitadaEm = solicitacaoCartao.solicitadaEm;
+        solicitacao.status = solicitacaoCartao.status;
+        return solicitacao;
+    }
+
+    public SolicitacaoCartao devolveComId() {
+
+        return new SolicitacaoCartao(id, usuario, tipoCartao, solicitadaEm, status);
+
+    }
+
     /** Permitir somente PENDENTE para CANCELADA; outros estados geram conflito. */
     public void cancelar() {
         // TODO: implementar o comportamento descrito no desafio.

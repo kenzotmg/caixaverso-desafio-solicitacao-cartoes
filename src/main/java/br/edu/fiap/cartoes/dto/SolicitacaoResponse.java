@@ -1,5 +1,7 @@
 package br.edu.fiap.cartoes.dto;
 import java.time.Instant;
+
+import br.edu.fiap.cartoes.entity.SolicitacaoCartao;
 import br.edu.fiap.cartoes.entity.StatusSolicitacao;
 import br.edu.fiap.cartoes.entity.StatusCartao;
 import jakarta.validation.constraints.*;
@@ -13,4 +15,9 @@ public record SolicitacaoResponse(
      @Schema(description = "Nome obtido por relacionamento JPA", example = "ESSENCIAL") String tipoCartaoNome,
      @Schema(description = "Data de abertura em UTC", example = "2026-10-20T12:00:00Z") Instant solicitadaEm,
      @Schema(description = "PENDENTE, CANCELADA ou EMITIDA", example = "PENDENTE") StatusSolicitacao status
-) {}
+) {
+    public static SolicitacaoResponse de(SolicitacaoCartao nova) {
+        return new SolicitacaoResponse(nova.getId(), nova.getUsuario().getId(), nova.getTipoCartao().getId(),
+                nova.getTipoCartao().getNome(), nova.getSolicitadaEm(), nova.getStatus());
+    }
+}
