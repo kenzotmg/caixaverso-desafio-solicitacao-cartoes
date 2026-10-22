@@ -6,6 +6,7 @@ import br.edu.fiap.cartoes.exception.EtapaNaoImplementadaException;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.persistence.EntityManager;
+import jakarta.persistence.LockModeType;
 import jakarta.transaction.Transactional;
 
 import java.util.List;
@@ -67,6 +68,22 @@ public class SolicitacaoCartaoRepositoryJpa implements SolicitacaoCartaoReposito
                 WHERE s.id = :id
                 """, SolicitacaoCartao.class)
                 .setParameter("id", id)
+                .getResultStream()
+                .findFirst();
+    }
+
+    @Override
+    public Optional<SolicitacaoCartao> buscarPorIdETitularComBloqueio(Long id, Long usuarioId) {
+        return entityManager.createQuery("""
+                SELECT s
+                FROM SolicitacaoCartao s
+                JOIN FETCH s.tipoCartao
+                JOIN FETCH s.usuario
+                WHERE s.id = :id AND s.usuario.id = :usuarioId
+                """, SolicitacaoCartao.class)
+                .setParameter("id", id)
+                .setParameter("usuarioId", usuarioId)
+                .setLockMode(LockModeType.PESSIMISTIC_WRITE)
                 .getResultStream()
                 .findFirst();
     }

@@ -18,5 +18,6 @@ public interface SolicitacaoCartaoRepository {
     SolicitacaoCartao salvar(SolicitacaoCartao solicitacaoCartao);
     boolean existsPorUsuarioIdAndStatus(Long usuarioId, TipoCartao tipoCartao);
     Optional<SolicitacaoCartao> listarSolicitacaoPorId(Long Id);
+    Optional<SolicitacaoCartao> buscarPorIdETitularComBloqueio(Long id, Long usuarioId);
     List<SolicitacaoCartao> listarSolicitacoes(Long usuarioId, StatusSolicitacao status);
 }
