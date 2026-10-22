@@ -1,18 +1,20 @@
 package br.edu.fiap.cartoes.usecase;
 import br.edu.fiap.cartoes.entity.SolicitacaoCartao;
+import br.edu.fiap.cartoes.entity.Cartao;
 import br.edu.fiap.cartoes.entity.TipoCartao;
 import br.edu.fiap.cartoes.entity.Usuario;
 import br.edu.fiap.cartoes.exception.RecursoNaoEncontradoException;
 import br.edu.fiap.cartoes.exception.RegraNegocioException;
 import br.edu.fiap.cartoes.repository.SolicitacaoCartaoRepository;
+import br.edu.fiap.cartoes.repository.CartaoRepository;
 import br.edu.fiap.cartoes.repository.TipoCartaoRepository;
 import br.edu.fiap.cartoes.repository.UsuarioRepository;
 import jakarta.enterprise.context.ApplicationScoped;
 import java.util.List;
 import br.edu.fiap.cartoes.dto.*;
 import br.edu.fiap.cartoes.entity.StatusSolicitacao;
-import br.edu.fiap.cartoes.exception.EtapaNaoImplementadaException;
 import jakarta.inject.Inject;
+import jakarta.transaction.Transactional;
 
 /**
  * Camada de aplicação a implementar: coordena uma operação, suas regras e transação.
@@ -28,11 +30,14 @@ public class SolicitacaoUseCase {
 
     private final SolicitacaoCartaoRepository solicitacaoRepository;
 
+    private final CartaoRepository cartaoRepository;
+
     @Inject
-    public SolicitacaoUseCase(UsuarioRepository usuarioRepository, TipoCartaoRepository tipoCartaoRepository, SolicitacaoCartaoRepository solicitacaoRepository) {
+    public SolicitacaoUseCase(UsuarioRepository usuarioRepository, TipoCartaoRepository tipoCartaoRepository, SolicitacaoCartaoRepository solicitacaoRepository, CartaoRepository cartaoRepository) {
         this.usuarioRepository = usuarioRepository;
         this.tipoCartaoRepository = tipoCartaoRepository;
         this.solicitacaoRepository = solicitacaoRepository;
+        this.cartaoRepository = cartaoRepository;
     }
 
     /** Buscar titular e tipo por JPA; tipo indisponível ou pedido pendente duplicado gera 409. */
@@ -78,14 +83,24 @@ public class SolicitacaoUseCase {
     }
 
     /** Em transação, buscar o próprio pedido e chamar cancelar; estado diferente de PENDENTE gera 409. */
+    @Transactional
     public SolicitacaoResponse cancelar(Long usuarioId, Long id) {
-        // TODO: implementar sem colocar SQL ou regras no controller.
-        throw new EtapaNaoImplementadaException("SolicitacaoUseCase.cancelar");
+        SolicitacaoCartao solicitacao = buscarPropriaComBloqueio(usuarioId, id);
+        solicitacao.cancelar();
+        return SolicitacaoResponse.de(solicitacao);
     }
 
     /** Em uma transação, bloquear o pedido para escrita, conferir titular/estado, criar cartão e marcar EMITIDA. */
+    @Transactional
     public CartaoResponse emitir(Long usuarioId, Long id) {
-        // TODO: implementar sem colocar SQL ou regras no controller.
-        throw new EtapaNaoImplementadaException("SolicitacaoUseCase.emitir");
+        SolicitacaoCartao solicitacao = buscarPropriaComBloqueio(usuarioId, id);
+        solicitacao.marcarEmitida();
+        Cartao cartao = cartaoRepository.salvar(new Cartao(solicitacao));
+        return CartaoResponse.de(cartao);
+    }
+
+    private SolicitacaoCartao buscarPropriaComBloqueio(Long usuarioId, Long id) {
+        return solicitacaoRepository.buscarPorIdETitularComBloqueio(id, usuarioId)
+                .orElseThrow(() -> new RecursoNaoEncontradoException("Solicitação não encontrada"));
     }
 }

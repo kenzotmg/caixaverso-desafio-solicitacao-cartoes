@@ -80,6 +80,7 @@ public class SolicitacaoController {
     /** Protegida. JPA, transação e bloqueio da mesma solicitação para não disputar com emissão. Somente PENDENTE vira CANCELADA; EMITIDA ou CANCELADA gera 409. */
     @PATCH
     @Path("/{id}/cancelar")
+    @Consumes(MediaType.WILDCARD)
     @Operation(summary="Cancelar minha solicitação pendente", description="Protegida. JPA, transação e bloqueio da mesma solicitação para não disputar com emissão. Somente PENDENTE vira CANCELADA; EMITIDA ou CANCELADA gera 409.")
     @APIResponses({
         @APIResponse(responseCode="200",description="Operação concluída",content=@Content(schema=@Schema(implementation=SolicitacaoResponse.class))),
@@ -87,7 +88,7 @@ public class SolicitacaoController {
         @APIResponse(responseCode="401",description="Credenciais ou token ausentes ou inválidos"),
         @APIResponse(responseCode="404",description="Recurso inexistente ou não pertencente ao titular"),
         @APIResponse(responseCode="409",description="Duplicidade ou estado incompatível"),
-        @APIResponse(responseCode="501",description="Casca ainda não implementada",content=@Content(schema=@Schema(implementation=ErroResponse.class)))
+        @APIResponse(responseCode="500",description="Falha interna ao concluir a operação",content=@Content(schema=@Schema(implementation=ErroResponse.class)))
     })
     public SolicitacaoResponse cancelar(@PathParam("id") @Positive @Parameter(description="ID da solicitação pendente", example="1") Long id) {
         return solicitacoes.cancelar(usuarioAtual.id(), id);
@@ -96,6 +97,7 @@ public class SolicitacaoController {
     /** Protegida. Simulação didática, não aprovação financeira real. JPA. Bloquear pedido, validar titular e PENDENTE, persistir um cartão ATIVO e atualizar pedido para EMITIDA na mesma transação. Repetição gera 409, nunca outro cartão. */
     @POST
     @Path("/{id}/emitir")
+    @Consumes(MediaType.WILDCARD)
     @Operation(summary="Simular emissão do meu cartão", description="Protegida. Simulação didática, não aprovação financeira real. JPA. Bloquear pedido, validar titular e PENDENTE, persistir um cartão ATIVO e atualizar pedido para EMITIDA na mesma transação. Repetição gera 409, nunca outro cartão.")
     @APIResponses({
         @APIResponse(responseCode="201",description="Operação concluída",content=@Content(schema=@Schema(implementation=CartaoResponse.class))),
@@ -103,7 +105,7 @@ public class SolicitacaoController {
         @APIResponse(responseCode="401",description="Credenciais ou token ausentes ou inválidos"),
         @APIResponse(responseCode="404",description="Recurso inexistente ou não pertencente ao titular"),
         @APIResponse(responseCode="409",description="Duplicidade ou estado incompatível"),
-        @APIResponse(responseCode="501",description="Casca ainda não implementada",content=@Content(schema=@Schema(implementation=ErroResponse.class)))
+        @APIResponse(responseCode="500",description="Falha interna ao concluir a operação",content=@Content(schema=@Schema(implementation=ErroResponse.class)))
     })
     public Response emitir(@PathParam("id") @Positive @Parameter(description="ID da própria solicitação pendente", example="1") Long id) {
         return Response.status(Response.Status.CREATED).entity(solicitacoes.emitir(usuarioAtual.id(), id)).build();
