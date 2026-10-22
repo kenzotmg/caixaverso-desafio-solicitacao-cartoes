@@ -1,8 +1,11 @@
 package br.edu.fiap.cartoes.repository;
 
 import br.edu.fiap.cartoes.entity.SolicitacaoCartao;
+import br.edu.fiap.cartoes.entity.StatusSolicitacao;
+import br.edu.fiap.cartoes.entity.TipoCartao;
 
 import java.util.List;
+import java.util.Optional;
 
 /**
  * Interface de persistência a completar pelo grupo. Não há Spring Data: declarar o
@@ -13,6 +16,7 @@ import java.util.List;
 public interface SolicitacaoCartaoRepository {
     // TODO: definir assinaturas de consulta e gravação indicadas no README.
     SolicitacaoCartao salvar(SolicitacaoCartao solicitacaoCartao);
-    List<SolicitacaoCartao> listarSolicitacoesPorUsuarioId(Long usuarioId);
-    List<SolicitacaoCartao> listarSolicitacoesPorStatus(String status);
+    boolean existsPorUsuarioIdAndStatus(Long usuarioId, TipoCartao tipoCartao);
+    Optional<SolicitacaoCartao> listarSolicitacaoPorId(Long Id);
+    List<SolicitacaoCartao> listarSolicitacoes(Long usuarioId, StatusSolicitacao status);
 }
