@@ -23,8 +23,6 @@ public class CartaoUseCase {
     }
 
     public List<CartaoResponse> listar(Long usuarioId) {
-        // TODO: implementar sem colocar SQL ou regras no controller.
-
-        throw new EtapaNaoImplementadaException("CartaoUseCase.listar");
+        return cartaoRepository.listarPorUsuario(usuarioId).stream().map(CartaoResponse::de).toList();
     }
 }

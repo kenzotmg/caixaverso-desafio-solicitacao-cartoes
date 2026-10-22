@@ -38,6 +38,13 @@ public class Cartao {
         this.status = StatusCartao.ATIVO;
     }
 
+    public Cartao(Long id, SolicitacaoCartao solicitacao, Instant emitidoEm, StatusCartao status) {
+        this.id = id;
+        this.solicitacao = solicitacao;
+        this.emitidoEm = emitidoEm;
+        this.status = status;
+    }
+
     /** Informar se o cartão está ATIVO. Não criar outra rota obrigatória. */
     public boolean estaAtivo() {
         // TODO: implementar o comportamento descrito no desafio.
@@ -57,4 +64,15 @@ public class Cartao {
     public void setEmitidoEm(Instant emitidoEm) { this.emitidoEm = emitidoEm; }
     public StatusCartao getStatus() { return status; }
     public void setStatus(StatusCartao status) { this.status = status; }
+    public static Cartao de(Cartao cartao) {
+        Cartao entity = new Cartao();
+        entity.setId(cartao.getId());
+        entity.setSolicitacao(cartao.getSolicitacao());
+        entity.setEmitidoEm(cartao.getEmitidoEm());
+        entity.setStatus(cartao.getStatus());
+        return entity;
+    }
+    public Cartao paraDominio() {
+        return new Cartao(id, solicitacao, emitidoEm, status);
+    }
 }
